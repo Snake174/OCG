@@ -18,6 +18,7 @@ Create folder "data/emulators" and "data/games"
 
 Run in console
 ```
+npm i -g electron-prebuilt
 npm install
 ```
 
@@ -28,5 +29,6 @@ npm start
 
 ## Build for all supported platforms
 ```
+npm i -g electron-packager
 npm run build
 ```
