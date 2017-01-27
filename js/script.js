@@ -1,6 +1,6 @@
 $( () => {
   const OS = require('os').type()
-  const VERSION = 8
+  const VERSION = 9
   var fs = require('fs')
   var path = require('path')
   var http = require('http')
@@ -274,11 +274,10 @@ $( () => {
   playGameBtn.click( () => {
     if (curData[ curConsole ] === undefined) return
 
-    mainSegment.addClass('loading')
-
     if (fs.existsSync( path.join( __dirname, 'data', 'games', curData[ curConsole ][ curIndex ].title + ext[ curConsole ] ) )) {
       playGame( path.join( __dirname, 'data', 'games', curData[ curConsole ][ curIndex ].title + ext[ curConsole ] ) )
     } else {
+      mainSegment.addClass('loading')
       let fileName = path.join( __dirname, 'data', 'games', curData[ curConsole ][ curIndex ].title + '.zip' )
 
       download( curData[ curConsole ][ curIndex ].download, fileName ).then( () => {
