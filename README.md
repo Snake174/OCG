@@ -14,6 +14,8 @@ Old consoles games catalogue
 
 
 ## First usage
+Create folder "data/emulators" and "data/games"
+
 Run in console
 ```
 npm install
