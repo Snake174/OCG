@@ -1,6 +1,6 @@
 $( () => {
   const OS = require('os').type()
-  const VERSION = 11
+  const VERSION = 12
   var fs = require('fs')
   var path = require('path')
   var http = require('http')
@@ -60,10 +60,6 @@ $( () => {
     let height = window.innerHeight
     let topGL = gamesList.offset().top
     let topGIS = gameInfoSide.offset().top
-    /*mainSegment.css( {
-      'min-height': height,
-      'height': height
-    } )*/
     gamesList.css( {
       'min-height': `${height - topGL - 20}px`,
       'height': `${height - topGL - 20}px`,
