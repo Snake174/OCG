@@ -1,0 +1,16 @@
+{
+  "name": "nes",
+  "version": "1.0.0",
+  "description": "",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron .",
+    "build": "electron-packager . NES --all --electron-version=1.4.13 --app-version=1.0.0 --out=dist --ignore=dist --prune"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "async": "^2.1.4",
+    "unzip": "^0.1.11"
+  }
+}

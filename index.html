@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="x-ua-compatible" content="ie=edge" />
+    <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1, minimal-ui" />
+    <meta name="format-detection" content="telephone=no" />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta http-equiv="Cache-Control" content="no-cache" />
+    <meta http-equiv="cleartype" content="on" />
+    <title>Consoles</title>
+    <link rel="stylesheet" href="./css/semantic.min.css">
+    <link rel="stylesheet" href="./css/styles.css">
+  </head>
+  <body>
+    <div class="ui inverted basic segment" id="main">
+      <div class="ui grid">
+        <div class="row">
+          <div class="sixteen wide column">
+            <div class="ui icon basic inverted buttons" id="consoles-menu"></div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="six wide column">
+            <div class="ui one column grid">
+              <div class="column">
+                <div class="ui fluid inverted search">
+                  <div class="ui icon inverted transparent fluid input">
+                    <input class="prompt" type="text" id="search-text" />
+                    <i class="search icon"></i>
+                  </div>
+                  <div class="results"></div>
+                </div>
+              </div>
+              <div class="column">
+                <div class="ui inverted segment" id="games-list-segment">
+                  <div class="ui divided link inverted list" id="games-list"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="ten wide column">
+            <div class="ui one column grid">
+              <div class="column">
+                <div class="ui icon basic inverted buttons">
+                  <div class="ui button" id="prev">
+                    <i class="chevron left icon"></i>
+                  </div>
+                  <div class="ui button" id="next">
+                    <i class="chevron right icon"></i>
+                  </div>
+                </div>
+                <div class="ui basic label">
+                  <i class="game icon"></i> <span id="game-count-info"></span>
+                </div>
+                <div class="ui basic inverted buttons" style="margin-left:20px;">
+                  <div class="ui button" id="play-game">Play</div>
+                  <div class="ui floating dropdown icon button">
+                    <i class="dropdown icon"></i>
+                    <div class="menu" id="emulators-menu"></div>
+                  </div>
+                </div>
+                <div class="ui icon inverted basic button atf" id="add-to-favourites" data-tooltip="Add to favourites" data-position="bottom left" style="margin-left:20px;">
+                  <span id="add-to-favourites-icon"><i class="empty star icon"></i></span>
+                </div>
+              </div>
+              <div class="column">
+                <div class="ui top attached tabular menu">
+                  <a class="item active" data-tab="first">Library</a>
+                  <a class="item" data-tab="second">Favourites</a>
+                </div>
+                <div class="ui bottom attached tab inverted basic segment active" data-tab="first">
+                  <div class="ui inverted basic segment" id="game-detail"></div>
+                </div>
+                <div class="ui bottom attached tab inverted basic segment" data-tab="second">
+                  <div class="ui inverted fluid accordion" id="favourites"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="ui basic modal" id="update-message">
+      <div class="ui icon header">
+        <i class="game icon"></i>
+        Old Consoles Games
+      </div>
+      <div class="content">
+        <p>Program seccessfully updated. Please restart for apply changes.</p>
+      </div>
+      <div class="actions">
+        <div class="ui green ok inverted button">
+          <i class="checkmark icon"></i> OK
+        </div>
+      </div>
+    </div>
+    <div class="ui basic small modal" id="favourites-form">
+      <div class="ui header">Add to favourites</div>
+      <div class="content">
+        <div class="ui inverted transparent right action left icon input">
+          <i class="tag icon"></i>
+          <input type="text" id="new-tag" placeholder="Enter new tag or" />
+          <div class="ui basic floating dropdown inverted button">
+            <div class="text" id="existing-tag">Select existing</div>
+            <i class="dropdown icon"></i>
+            <div class="menu" id="tag-list"></div>
+          </div>
+        </div>
+      </div>
+      <div class="actions">
+        <div class="ui red basic cancel inverted button">
+          <i class="remove icon"></i> Cancel
+        </div>
+        <div class="ui green ok inverted button">
+          <i class="checkmark icon"></i> OK
+        </div>
+      </div>
+    </div>
+    <script>window.$ = window.jQuery = require('./js/jquery.min.js');</script>
+    <script src="./js/semantic.min.js"></script>
+    <script src="./js/script.js"></script>
+  </body>
+</html>
