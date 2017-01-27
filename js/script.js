@@ -1,6 +1,6 @@
 $( () => {
   const OS = require('os').type()
-  const VERSION = 6
+  const VERSION = 7
   var fs = require('fs')
   var path = require('path')
   var http = require('http')
@@ -176,6 +176,7 @@ $( () => {
           game.description,
           '</p></div>',
           '<div class="extra">',
+          '<div class="ui mini right floated buttons">',
           '<div class="ui basic inverted right floated buttons">',
           `<div class="ui button play-favourite" cur-console="${consoleName}" game-id="${consoleObj.id[i]}">Play</div>`,
           '<div class="ui floating dropdown icon button">',
@@ -183,6 +184,10 @@ $( () => {
           `<div class="menu" id="${consoleName}-${consoleObj.id[i]}">`,
           emulItems,
           '</div>',
+          '</div>',
+          '</div>',
+          `<div class="ui icon inverted red circular button remove-favourite" cur-console="${consoleName}" game-id="${consoleObj.id[i]}" style="margin-left:20px;" data-tooltip="Remove" data-position="bottom left">`,
+          `<i class="remove icon" cur-console="${consoleName}" game-id="${consoleObj.id[i]}"></i>`,
           '</div>',
           '</div>',
           '</div>',
@@ -212,6 +217,17 @@ $( () => {
       let emul = $(`#${cons}-${gameID} > .item.active`).text().trim()
 
       playFavourite( cons, gameID, emul )
+    } )
+
+    $('.remove-favourite').click( (e) => {
+      let self = $(e.toElement)
+      let cons = self.attr('cur-console')
+      let gameID = self.attr('game-id')
+      let index = config.consoles[ cons ].id.indexOf( gameID )
+      config.consoles[ cons ].id.splice( index, 1 )
+      config.consoles[ cons ].tag.splice( index, 1 )
+      showFavourites()
+      fs.writeFileSync('./config.json', JSON.stringify( config, null, 2 ) )
     } )
   }
 
