@@ -1,6 +1,6 @@
 $( () => {
   const OS = require('os').type()
-  const VERSION = 10
+  const VERSION = 11
   var fs = require('fs')
   var path = require('path')
   var http = require('http')
@@ -21,6 +21,7 @@ $( () => {
   var consolesMenu = $('#consoles-menu')
   var emulatorsMenu = $('#emulators-menu')
   var gamesList = $('#games-list')
+  var gameInfoSide = $('#game-info-side')
   var mainSegment = $('#main')
   var gameDetail = $('#game-detail')
   var gameCountInfo = $('#game-count-info')
@@ -52,6 +53,27 @@ $( () => {
 
     return fs.readdirSync( srcpath ).filter( (file) => {
       return fs.statSync( path.resolve( srcpath, file ) ).isDirectory()
+    } )
+  }
+
+  var setSizes = () => {
+    let height = window.innerHeight
+    let topGL = gamesList.offset().top
+    let topGIS = gameInfoSide.offset().top
+    /*mainSegment.css( {
+      'min-height': height,
+      'height': height
+    } )*/
+    gamesList.css( {
+      'min-height': `${height - topGL - 20}px`,
+      'height': `${height - topGL - 20}px`,
+      'overflow': 'auto !important'
+    } )
+    gameInfoSide.css( {
+      'min-height': `${height - topGIS - 20}px`,
+      'height': `${height - topGIS - 20}px`,
+      'overflow': 'auto !important',
+      'padding-right': '20px'
     } )
   }
 
@@ -434,6 +456,8 @@ $( () => {
 
             showGame( curData[ curConsole ][ curIndex ] )
           } )
+
+          setSizes()
         } )
 
         btn.prepend( $('<img/>', { src: e.icon } ) )
@@ -444,4 +468,6 @@ $( () => {
       $('#consoles-menu > button')[0].click()
     }
   } )
+
+  window.addEventListener( 'resize', setSizes, false )
 } )

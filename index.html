@@ -11,15 +11,36 @@
     <title>Consoles</title>
     <link rel="stylesheet" href="./css/semantic.min.css">
     <link rel="stylesheet" href="./css/styles.css">
+    <style>
+      html, body {
+        height: 100vh !important;
+        min-height: 100vh !important;
+        display: flex !important;
+        overflow: hidden;
+      }
+      ::-webkit-scrollbar {
+        width: 15px;
+      }
+      ::-webkit-scrollbar-track {
+        -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
+        border-radius: 10px;
+      }
+      ::-webkit-scrollbar-thumb {
+        border-radius: 10px;
+        -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.5);
+      }
+    </style>
   </head>
   <body>
-    <div class="ui inverted basic segment" id="main">
-      <div class="ui grid">
+    <div class="ui inverted basic segment" id="main" style="margin:0 !important;padding:0 !important;">
+      <div class="ui grid" style="margin-bottom:100px;">
         <div class="row">
           <div class="sixteen wide column">
-            <div class="ui icon basic inverted buttons" id="consoles-menu"></div>
+            <div class="ui inverted top fixed menu" id="consoles-menu" style="padding:10px;"></div>
           </div>
         </div>
+      </div>
+      <div class="ui grid">
         <div class="row">
           <div class="six wide column">
             <div class="ui one column grid">
@@ -29,12 +50,11 @@
                     <input class="prompt" type="text" id="search-text" />
                     <i class="search icon"></i>
                   </div>
-                  <div class="results"></div>
                 </div>
               </div>
               <div class="column">
                 <div class="ui inverted segment" id="games-list-segment">
-                  <div class="ui divided link inverted list" id="games-list"></div>
+                  <div class="ui divided link inverted list" id="games-list" style="min-height:1000px;height:1000px;overflow:auto;"></div>
                 </div>
               </div>
             </div>
@@ -64,7 +84,7 @@
                   <span id="add-to-favourites-icon"><i class="empty star icon"></i></span>
                 </div>
               </div>
-              <div class="column">
+              <div class="column" id="game-info-side" style="min-height:1000px;height:1000px;overflow:auto;padding-right:20px;">
                 <div class="ui top attached tabular menu">
                   <a class="item active" data-tab="first">Library</a>
                   <a class="item" data-tab="second">Favourites</a>
