@@ -1,6 +1,6 @@
 $( () => {
   const OS = require('os').type()
-  const VERSION = 9
+  const VERSION = 10
   var fs = require('fs')
   var path = require('path')
   var http = require('http')
@@ -79,6 +79,7 @@ $( () => {
     } )
   }
 
+  // Queue for downlod emulators
   var q = async.queue( (task, cb) => {
     download( task.URL, task.target ).then( () => {
       fs.createReadStream( task.target ).pipe( unzip.Extract( { path: path.join( __dirname, 'data', 'emulators', OS ) } ) ).on( 'close', () => {
@@ -88,6 +89,7 @@ $( () => {
     } )
   }, 5 )
 
+  // Queue for download all consoles data
   var gamesDataQueue = async.queue( (task, cb) => {
     $.get( task.URL, (gameData) => {
       curData[ task.tag ] = gameData
@@ -97,14 +99,7 @@ $( () => {
 
   var playGame = (game) => {
     let emul = $('#emulators-menu > .item.active').text().trim()
-
-    execFile( path.join( __dirname, 'data', 'emulators', OS, curConsole, emul, emul ), [game], (err, data) => {
-      if (err) {
-        console.log( err )
-      } else {
-        console.log( data.toString() )
-      }
-    } )
+    execFile( path.join( __dirname, 'data', 'emulators', OS, curConsole, emul, emul ), [game], (err, data) => {} )
   }
 
   var showGame = (gameData) => {
@@ -125,6 +120,7 @@ $( () => {
     gameDetail.html( html )
     gameCountInfo.html( `${curIndex + 1} / ${curCount}` )
 
+    // Favourites button
     if (config.consoles[ curConsole ] === undefined || config.consoles[ curConsole ].id === undefined) {
       addToFavourites.addClass('atf')
       addToFavourites.attr( 'data-tooltip', 'Add to favourites' )
@@ -215,7 +211,6 @@ $( () => {
       let cons = self.attr('cur-console')
       let gameID = self.attr('game-id')
       let emul = $(`#${cons}-${gameID} > .item.active`).text().trim()
-
       playFavourite( cons, gameID, emul )
     } )
 
@@ -329,6 +324,7 @@ $( () => {
         } )
         .modal('show')
     } else {
+      // Remove from favourites
       let index = config.consoles[ curConsole ].id.indexOf( curIndex )
       config.consoles[ curConsole ].id.splice( index, 1 )
       config.consoles[ curConsole ].tag.splice( index, 1 )
@@ -342,6 +338,7 @@ $( () => {
   } )
 
   $.get( 'http://snake174.github.io/programs/consoles-games/data/main.json', (data) => {
+    // Program autoupdate
     if (data.version > VERSION) {
       fs.unlinkSync( path.join( __dirname, 'index.html' ) )
       fs.unlinkSync( path.join( __dirname, 'js', 'script.js' ) )
@@ -357,6 +354,7 @@ $( () => {
     gameDataDownloads = data.consoles.length
 
     for (let i = 0; i < data.consoles.length; ++i) {
+      // Get all consoles game data
       gamesDataQueue.push( { URL: data.consoles[i].data, tag: data.consoles[i].tag }, () => {
         --gameDataDownloads
 
@@ -365,6 +363,7 @@ $( () => {
         }
       } )
 
+      // Download missing emulators
       if (!fs.existsSync( path.join( __dirname, 'data', 'emulators', OS, data.consoles[i].tag ) )) {
         mainSegment.addClass('loading')
         needDownload = true
@@ -376,20 +375,22 @@ $( () => {
           --curDownloads
 
           if (curDownloads == 0) {
-            $('#consoles-menu > button')[0].click()
             mainSegment.removeClass('loading')
+            $('#consoles-menu > button')[0].click()
           }
         } )
       }
     }
 
     $.each( data.consoles, (i, e) => {
-      let btn = $('<button/>', { 'class': 'ui button', 'data-tooltip': e.tag, 'data-position': 'bottom left' } )
+      // Main menu buttons
+      let btn = $('<button/>', { 'class': 'ui basic inverted transparent grey button', 'data-tooltip': e.tag, 'data-position': 'bottom left' } )
         .click( () => {
           curConsole = e.tag
           let emulators = getDirectories( path.join( __dirname, 'data', 'emulators', OS, curConsole ) )
           emulatorsMenu.empty()
 
+          // List of supported emulators for current console
           $.each( emulators, (emulIndex, emulName) => {
             let emul = $('<div/>', { class: (emulIndex == 0 ? 'item active' : 'item'), html: emulName } )
             emul.appendTo( emulatorsMenu )
@@ -401,24 +402,26 @@ $( () => {
 
           gamesList.empty()
 
+          // Get current console game data
           $.get( e.data, (gameData) => {
             curData[ curConsole ] = gameData
             curIndex = 0
             curCount = gameData.length
 
+            // List of current console games
             $.each( gameData, (ii, ee) => {
               gamesTitles.push( { title: ee.title, id: ii } )
 
-              let gameBtn = $('<a/>', { class: 'item', text: ee.title, ind: ii } )
+              let gameBtn = $('<a/>', { class: 'item', text: ee.title, ind: ii, style: 'padding-right:20px;' } )
                 .click( () => {
                   curIndex = ii
                   showGame( gameData[ ii ] )
-                  $('html,body').animate( { scrollTop: 0 }, 100 )
                 } )
 
               gameBtn.appendTo( gamesList )
             } )
 
+            // Search field
             $('.ui.search').search( {
               source: gamesTitles,
               searchFullText: false,
