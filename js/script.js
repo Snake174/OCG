@@ -1,6 +1,6 @@
 $( () => {
   const OS = require('os').type()
-  const VERSION = 7
+  const VERSION = 8
   var fs = require('fs')
   var path = require('path')
   var http = require('http')
@@ -240,10 +240,12 @@ $( () => {
     if (fs.existsSync( game )) {
       execFile( emulator, [game], (err, data) => {} )
     } else {
+      mainSegment.addClass('loading')
       let fileName = path.join( __dirname, 'data', 'games', curData[ cons ][ gameID ].title + '.zip' )
 
       download( curData[ cons ][ gameID ].download, fileName ).then( () => {
         fs.createReadStream( fileName ).pipe( unzip.Extract( { path: path.join( __dirname, 'data', 'games' ) } ) ).on( 'close', () => {
+          mainSegment.removeClass('loading')
           fs.unlinkSync( fileName )
           execFile( emulator, [game], (err, data) => {} )
         } )
@@ -272,19 +274,18 @@ $( () => {
   playGameBtn.click( () => {
     if (curData[ curConsole ] === undefined) return
 
-    playGameBtn.addClass('loading')
+    mainSegment.addClass('loading')
 
     if (fs.existsSync( path.join( __dirname, 'data', 'games', curData[ curConsole ][ curIndex ].title + ext[ curConsole ] ) )) {
       playGame( path.join( __dirname, 'data', 'games', curData[ curConsole ][ curIndex ].title + ext[ curConsole ] ) )
-      playGameBtn.removeClass('loading')
     } else {
       let fileName = path.join( __dirname, 'data', 'games', curData[ curConsole ][ curIndex ].title + '.zip' )
 
       download( curData[ curConsole ][ curIndex ].download, fileName ).then( () => {
         fs.createReadStream( fileName ).pipe( unzip.Extract( { path: path.join( __dirname, 'data', 'games' ) } ) ).on( 'close', () => {
+          mainSegment.removeClass('loading')
           fs.unlinkSync( fileName )
           playGame( path.join( __dirname, 'data', 'games', curData[ curConsole ][ curIndex ].title + ext[ curConsole ] ) )
-          playGameBtn.removeClass('loading')
         } )
       } )
     }
@@ -366,6 +367,7 @@ $( () => {
       } )
 
       if (!fs.existsSync( path.join( __dirname, 'data', 'emulators', OS, data.consoles[i].tag ) )) {
+        mainSegment.addClass('loading')
         needDownload = true
         ++curDownloads
         let fileName = path.join( __dirname, 'data', 'emulators', OS, data.consoles[i].tag + '.zip' )
@@ -376,6 +378,7 @@ $( () => {
 
           if (curDownloads == 0) {
             $('#consoles-menu > button')[0].click()
+            mainSegment.removeClass('loading')
           }
         } )
       }
@@ -384,7 +387,6 @@ $( () => {
     $.each( data.consoles, (i, e) => {
       let btn = $('<button/>', { 'class': 'ui button', 'data-tooltip': e.tag, 'data-position': 'bottom left' } )
         .click( () => {
-          mainSegment.addClass('loading')
           curConsole = e.tag
           let emulators = getDirectories( path.join( __dirname, 'data', 'emulators', OS, curConsole ) )
           emulatorsMenu.empty()
@@ -430,8 +432,6 @@ $( () => {
 
             showGame( curData[ curConsole ][ curIndex ] )
           } )
-
-          mainSegment.removeClass('loading')
         } )
 
         btn.prepend( $('<img/>', { src: e.icon } ) )
