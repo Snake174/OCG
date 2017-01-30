@@ -1,6 +1,6 @@
 $( () => {
   const OS = require('os').type()
-  const VERSION = 12
+  const VERSION = 13
   var fs = require('fs')
   var path = require('path')
   var http = require('http')
@@ -91,6 +91,8 @@ $( () => {
         } )
       } ).on( 'error', err => {
         if (responseSent) return
+        $('#error-message').html( err )
+        $('#errors-messages').modal('show')
         responseSent = true
         reject( err )
       } )
@@ -117,7 +119,12 @@ $( () => {
 
   var playGame = (game) => {
     let emul = $('#emulators-menu > .item.active').text().trim()
-    execFile( path.join( __dirname, 'data', 'emulators', OS, curConsole, emul, emul ), [game], (err, data) => {} )
+    execFile( path.join( __dirname, 'data', 'emulators', OS, curConsole, emul, emul ), [game], (err, data) => {
+      if (err) {
+        $('#error-message').html( err )
+        $('#errors-messages').modal('show')
+      }
+    } )
   }
 
   var showGame = (gameData) => {
@@ -200,7 +207,7 @@ $( () => {
           '</div>',
           '</div>',
           '</div>',
-          `<div class="ui icon inverted red circular button remove-favourite" cur-console="${consoleName}" game-id="${consoleObj.id[i]}" style="margin-left:20px;" data-tooltip="Remove" data-position="bottom left">`,
+          `<div class="ui icon inverted red circular button remove-favourite" cur-console="${consoleName}" game-id="${consoleObj.id[i]}" style="margin-left:20px;border-radius:20px !important;" data-tooltip="Remove" data-position="bottom left">`,
           `<i class="remove icon" cur-console="${consoleName}" game-id="${consoleObj.id[i]}"></i>`,
           '</div>',
           '</div>',
@@ -251,7 +258,12 @@ $( () => {
     let emulator = path.join( __dirname, 'data', 'emulators', OS, cons, emul, emul )
 
     if (fs.existsSync( game )) {
-      execFile( emulator, [game], (err, data) => {} )
+      execFile( emulator, [game], (err, data) => {
+        if (err) {
+          $('#error-message').html( err )
+          $('#errors-messages').modal('show')
+        }
+      } )
     } else {
       mainSegment.addClass('loading')
       let fileName = path.join( __dirname, 'data', 'games', curData[ cons ][ gameID ].title + '.zip' )
@@ -260,7 +272,12 @@ $( () => {
         fs.createReadStream( fileName ).pipe( unzip.Extract( { path: path.join( __dirname, 'data', 'games' ) } ) ).on( 'close', () => {
           mainSegment.removeClass('loading')
           fs.unlinkSync( fileName )
-          execFile( emulator, [game], (err, data) => {} )
+          execFile( emulator, [game], (err, data) => {
+            if (err) {
+              $('#error-message').html( err )
+              $('#errors-messages').modal('show')
+            }
+          } )
         } )
       } )
     }
