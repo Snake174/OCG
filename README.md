@@ -32,3 +32,14 @@ npm start
 npm i -g electron-packager
 npm run build
 ```
+
+## Adding emulators
+Emulators are located in the same folder, respectively, of the platform. 
+For WIndows it's "Windows_NT", for Linux - "Linux" ;) 
+Add emulators to be put into the appropriate folder (NES, SNES, ...). 
+The name of the executable file must be the same as the folder name. For example:
+```
+Windows_NT/NES/nestopia/nestopia.exe
+Windows_NT/Genesis/CoolEmul/CoolEmul.exe
+...
+```
